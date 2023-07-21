@@ -1,0 +1,13 @@
+module clock_divider(clk_in,clk_out);
+input clk_in;
+output reg clk_out;
+reg [27:0]cnt=0;
+parameter div=28'd500_000_000;
+always@(posedge clk_in)
+begin
+    cnt=cnt+1;
+    if(cnt==div)
+        cnt<=28'b0;
+  clk_out=(cnt<(div/2))?1'b0:1'b1; 
+  end
+endmodule
