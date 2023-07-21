@@ -1,0 +1,241 @@
+module fsm0(clk,up,status,motor,n_flr);
+input clk;
+input [3:0]up;
+output status;
+output [1:0]motor,n_flr;
+reg [1:0]motor=2'b00;
+reg status=1;
+reg [1:0]pf,n_f=0;
+parameter g=2'b00,f=2'b01,s=2'b10,t=2'b11;
+parameter a=4'b0001,b=4'b0010,c=4'b0100,d=4'b1000;
+always@(posedge clk)
+begin
+pf<=n_f;
+end
+assign n_flr=n_f;
+always@(posedge clk)
+begin
+ case(n_f)
+ g: begin
+    if(up==a) begin
+            n_f=g;
+            status=1;
+            motor=2'b00;
+            end
+     else if(up==b) begin
+     case(n_f)
+          g:begin
+              n_f=f;
+              status=0;
+              motor=2'b11; end
+          f: begin
+                n_f=f;
+                status=1;
+                motor=2'b00; end
+               endcase 
+               end
+       else if(up==c) begin
+       case(n_f)
+            g:begin
+                n_f=f;
+                status=0;
+                motor=2'b11;
+                end
+            f:begin
+                n_f=s;
+                status=0;
+                motor=2'b11;
+                end
+            s: begin
+                n_f=s;
+                status=1;
+                motor=2'b00; end
+                endcase
+                end
+        else if(up==d) begin
+           case(n_f)
+            g:begin
+                n_f=f;
+                status=0;
+                motor=2'b11;
+                end
+            f:begin
+                n_f=s;
+                status=0;
+                motor=2'b11;
+                end
+            s: begin
+                n_f=t;
+                status=0;
+                motor=2'b11; end
+            t:begin
+                n_f=t;
+                status=1;
+                motor=2'b00; end
+                endcase
+                end
+                end
+   f: begin
+        if(up==a) 
+        begin
+            case(n_f)
+            f: begin
+               n_f=g;
+               status=0;
+               motor=2'b10;
+               end
+           g: begin
+                n_f=g;
+                status=1;
+                motor=2'b00;
+                end
+                endcase
+        end
+      else if(up==b)
+        begin
+         n_f=f;
+         status=1;
+         motor=2'b00; end
+      else if(up==c)
+      begin
+        case(n_f)
+        f: begin
+            n_f=s;
+            status=0;
+            motor=2'b11;
+            end
+        s:  begin
+            n_f=s;
+            status=1;
+            motor=2'b00; end
+            endcase
+            end
+     else if(up==d) begin
+        case(n_f)
+        f:begin
+            n_f=s;
+            status=0;
+            motor=2'b11;
+            end
+        s:begin
+            n_f=t;
+            status=0;
+            motor=2'b11; end
+        t: begin
+            n_f=t;
+            status=1;
+            motor=2'b00; end
+            endcase
+     end
+     end
+    s: begin
+        if(up==a) begin
+         case(n_f)
+           s:begin
+            n_f=f;
+            status=0;
+            motor=2'b10; end
+           f:begin
+            n_f=g;
+            status=0;
+            motor=2'b10; end
+           g:begin
+            n_f=g;
+            status=1;
+            motor=2'b00;
+            end
+            endcase
+            end
+        else if(up==b) begin
+          case(n_f)
+           s:begin
+            n_f=f;
+            status=0;
+            motor=2'b10; end
+           f:begin
+            n_f=f;
+            status=1;
+            motor=2'b00; end
+            endcase
+            end
+        else if(up==c) begin
+            n_f=s;
+            status=1;
+            motor=2'b00;
+            end
+        else if(up==d) begin
+            case(n_f)
+            s: begin
+                n_f=t;
+                status=0;
+                motor=2'b11; end
+            t: begin
+                n_f=t;
+                status=1;
+                motor=2'b00; end
+            endcase
+     end       
+     end
+    t: begin
+        if(up==a)
+            begin 
+            case(n_f)
+            t:begin
+            n_f=s;
+            status=0;
+            motor=2'b10; end
+            s:begin
+            n_f=f;
+            status=0;
+            motor=2'b10; end
+            f:begin
+            n_f=g;
+            status=0;
+            motor=2'b10; end
+            g:begin
+            n_f=g;
+            status=1;
+            motor=2'b00;
+            end
+            endcase
+            end
+        else if(up==b) begin
+            case(n_f)
+           t: begin
+            n_f=s;
+            status=0;
+            motor=2'b10;
+            end
+           s:begin
+            n_f=f;
+            status=0;
+            motor=2'b10; end
+           f:begin
+            n_f=f;
+            status=1;
+            motor=2'b00; end
+            endcase
+            end
+        else if(up==c) begin
+          case(n_f)
+           t:begin
+            n_f=s;
+            status=0;
+            motor=2'b10; end
+           s:begin
+            n_f=s;
+            status=1;
+            motor=2'b00; end
+            endcase
+            end
+        else if(up==d) begin
+           n_f=t;
+           status=1;
+           motor=2'b00;
+           end
+         
+     end   
+     endcase
+     end
+            
+endmodule
