@@ -1,0 +1,17 @@
+
+module display(an,ca,in);
+input [1:0]in;
+output [7:0]an;
+output reg [6:0]ca;
+assign an=8'b11111110;
+always@(in)
+begin
+case(in)
+    2'b00: ca <=7'b0000001;
+    2'b01: ca <=7'b1001111;
+    2'b10: ca <=7'b0010010;
+    2'b11: ca <=7'b0000110;
+    default: ca <=7'b0000001;
+endcase
+end
+endmodule
